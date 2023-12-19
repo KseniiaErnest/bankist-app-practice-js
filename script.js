@@ -61,3 +61,79 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+const displayMovements = function (movements) {
+  containerMovements.innerHTML = '';
+
+  movements.forEach((mov, i) => {
+    const type = mov > 0 ? 'deposit' : 'withdrawal';
+
+    const html = `
+<div class="movements__row">
+  <div class="movements__type movements__type--${type}">${i + 1} ${type}</div>
+  <div class="movements__value">${mov}</div>
+</div>
+  `;
+
+    containerMovements.insertAdjacentHTML('afterbegin', html);
+  });
+};
+
+displayMovements(account1.movements);
+
+const calcDisplayBalance = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${balance} EUR`;
+};
+
+calcDisplayBalance(account1.movements);
+
+const createUserName = function (accs) {
+  accs.forEach(acc => {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map(name => {
+        return name[0];
+      })
+      .join('');
+  });
+};
+
+createUserName(accounts);
+
+//////////////////////
+const eurToUsd = 1.1;
+
+const movementsUSD = account1.movements.map(mov => {
+  return mov * eurToUsd;
+});
+
+console.log(account1.movements);
+console.log(movementsUSD);
+
+const deposits = account1.movements.filter(mov => {
+  return mov > 0;
+});
+
+console.log(deposits);
+
+const withdrawals = account1.movements.filter(mov => mov < 0);
+console.log(withdrawals);
+
+// accumulator => snowball
+const balance = account1.movements.reduce((acc, currentValue) => {
+  return acc + currentValue;
+}, 0);
+
+console.log(balance);
+
+// Maximum value
+const max = account1.movements.reduce((acc, mov) => {
+  if (acc > mov) {
+    return acc;
+  } else {
+    return mov;
+  }
+}, account1.movements[0]);
+
+console.log(max);
