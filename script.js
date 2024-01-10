@@ -198,6 +198,30 @@ const updateUI = function (acc) {
   calcDisplaySummary(acc);
 };
 
+const startLogoutTimer = function () {
+  // Set time to 5 minutes
+  let time = 12;
+
+  // Call the timer every second
+  const timer = setInterval(function () {
+    const min = String(Math.trunc(time / 60)).padStart(2, 0);
+    const sec = String(time % 60).padStart(2, 0);
+
+    // In each call, print the remaining time to UI
+    labelTimer.textContent = `${min}:${sec}`;
+    // Decrease 1s
+    time--;
+
+    // When 0 seconds, stop timer and log out user
+    if (time === 0) {
+      clearInterval(timer);
+      labelWelcome.textContent = 'Log in to get started';
+      containerApp.style.opacity = 0;
+    }
+  }, 1000);
+};
+
+/////////////////////////
 //Event handlers
 let currentAccount;
 
@@ -264,7 +288,7 @@ btnLogin.addEventListener('click', function (e) {
     // Clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
-
+    startLogoutTimer();
     updateUI(currentAccount);
   }
 });
@@ -696,4 +720,11 @@ console.log('Waiting...');
 if (ingredients.includes('spinach')) {
   clearTimeout(pizzaTimer);
 }
+*/
+
+/*
+setInterval(function() {
+  const now = new Date();
+  console.log(now);
+}, 1000)
 */
